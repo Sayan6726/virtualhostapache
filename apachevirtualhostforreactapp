@@ -1,0 +1,28 @@
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+ServerName project.com
+DocumentRoot /var/www/html/projectname/dist
+ServerAdmin support@openwebsolutions.in
+ErrorLog /var/log/apache2/errorfe_error.log
+CustomLog /var/log/apache2/accessfe_access.log combined
+<Directory "/var/www/html/projectname/dist">
+#DAV On
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+
+</Directory>
+
+SSLCertificateFile /etc/letsencrypt/live/project.com/fullchain.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/project.com/privkey.pem
+Include /etc/letsencrypt/options-ssl-apache.conf
+    <IfModule mod_headers.c>
+        # Do not cache sw.js, required for offline-first updates.
+        <FilesMatch "sw\.js$">
+            Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+            Header set Pragma "no-cache"
+        </FilesMatch>
+    </IfModule>
+
+</VirtualHost>
+</IfModule>
